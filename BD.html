@@ -1,0 +1,3136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberpunk Birthday</title>
+    <style>
+        /* All the existing CSS from before... */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0033 50%, #000428 100%);
+            color: #00ffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Page loader */
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            animation: fadeOut 2s forwards 2s;
+        }
+
+        .loader-text {
+            font-size: 1.5rem;
+            color: #00ffff;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Background elements */
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 10s linear infinite;
+            z-index: -2;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .cyber-grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 30%, rgba(0, 0, 0, 0.7) 100%);
+            z-index: -1;
+        }
+
+        .circuit-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="M20,20 L80,20 L80,80 L20,80 Z" stroke="%2300ffff" fill="none" stroke-width="0.5"/><circle cx="20" cy="20" r="3" fill="%2300ffff"/><circle cx="80" cy="20" r="3" fill="%2300ffff"/><circle cx="80" cy="80" r="3" fill="%2300ffff"/><circle cx="20" cy="80" r="3" fill="%2300ffff"/></svg>');
+            animation: circuitPulse 5s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes circuitPulse {
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: 0.3; }
+        }
+
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.02;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .noise::before {
+            content: "";
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0"/></filter><rect width="256" height="256" filter="url(%23noiseFilter)"/></svg>');
+            animation: noise 0.2s steps(10) infinite;
+        }
+
+        @keyframes noise {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-5%, -10%); }
+            20% { transform: translate(-15%, 5%); }
+            30% { transform: translate(7%, -25%); }
+            40% { transform: translate(-5%, 25%); }
+            50% { transform: translate(-15%, 10%); }
+            60% { transform: translate(15%, 0%); }
+            70% { transform: translate(0%, 15%); }
+            80% { transform: translate(3%, 35%); }
+            90% { transform: translate(-10%, 10%); }
+        }
+
+        .glitch-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(transparent 50%, rgba(255, 0, 255, 0.03) 50%);
+            background-size: 100% 4px;
+            z-index: 1;
+            pointer-events: none;
+            animation: glitch 2s linear infinite;
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translateY(0); }
+            10% { transform: translateY(-2px); }
+            20% { transform: translateY(2px); }
+            30% { transform: translateY(-1px); }
+            40% { transform: translateY(1px); }
+            50% { transform: translateY(-2px); }
+            60% { transform: translateY(2px); }
+            70% { transform: translateY(-1px); }
+            80% { transform: translateY(1px); }
+            90% { transform: translateY(-2px); }
+        }
+
+        /* Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #00ffff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00ffff;
+            animation: float 20s infinite linear;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 20%; animation-delay: 1s; }
+        .particle:nth-child(3) { left: 30%; animation-delay: 2s; }
+        .particle:nth-child(4) { left: 40%; animation-delay: 3s; }
+        .particle:nth-child(5) { left: 50%; animation-delay: 4s; }
+        .particle:nth-child(6) { left: 60%; animation-delay: 5s; }
+        .particle:nth-child(7) { left: 70%; animation-delay: 6s; }
+        .particle:nth-child(8) { left: 80%; animation-delay: 7s; }
+        .particle:nth-child(9) { left: 90%; animation-delay: 8s; }
+        .particle:nth-child(10) { left: 15%; animation-delay: 9s; }
+        .particle:nth-child(11) { left: 25%; animation-delay: 10s; }
+        .particle:nth-child(12) { left: 35%; animation-delay: 11s; }
+        .particle:nth-child(13) { left: 45%; animation-delay: 12s; }
+        .particle:nth-child(14) { left: 55%; animation-delay: 13s; }
+        .particle:nth-child(15) { left: 65%; animation-delay: 14s; }
+        .particle:nth-child(16) { left: 75%; animation-delay: 15s; }
+        .particle:nth-child(17) { left: 85%; animation-delay: 16s; }
+        .particle:nth-child(18) { left: 5%; animation-delay: 17s; }
+        .particle:nth-child(19) { left: 95%; animation-delay: 18s; }
+        .particle:nth-child(20) { left: 50%; animation-delay: 19s; }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Cyber lines */
+        .cyber-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .cyber-line {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00ffff, transparent);
+            animation: cyberLineMove 8s linear infinite;
+        }
+
+        .cyber-line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .cyber-line:nth-child(2) { top: 40%; animation-delay: 2s; }
+        .cyber-line:nth-child(3) { top: 60%; animation-delay: 4s; }
+        .cyber-line:nth-child(4) { top: 80%; animation-delay: 6s; }
+
+        @keyframes cyberLineMove {
+            0% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .cyber-line-vertical-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .cyber-line-vertical {
+            position: absolute;
+            width: 1px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, #ff00ff, transparent);
+            animation: cyberLineVerticalMove 10s linear infinite;
+        }
+
+        .cyber-line-vertical:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .cyber-line-vertical:nth-child(2) { left: 30%; animation-delay: 2.5s; }
+        .cyber-line-vertical:nth-child(3) { left: 50%; animation-delay: 5s; }
+        .cyber-line-vertical:nth-child(4) { left: 70%; animation-delay: 7.5s; }
+        .cyber-line-vertical:nth-child(5) { left: 90%; animation-delay: 10s; }
+
+        @keyframes cyberLineVerticalMove {
+            0% {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+        }
+
+        /* Decorative elements */
+        .decoration {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: decorationPulse 4s ease-in-out infinite;
+        }
+
+        .decoration-1 {
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .decoration-2 {
+            top: 15%;
+            right: 10%;
+            animation-delay: 1s;
+        }
+
+        .decoration-3 {
+            bottom: 20%;
+            left: 8%;
+            animation-delay: 2s;
+        }
+
+        .decoration-4 {
+            bottom: 15%;
+            right: 5%;
+            animation-delay: 3s;
+        }
+
+        .decoration-5 {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            animation-delay: 1.5s;
+        }
+
+        @keyframes decorationPulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.6;
+            }
+        }
+
+        /* Hexagon elements */
+        .hexagon-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .hexagon {
+            position: absolute;
+            width: 60px;
+            height: 34.64px;
+            background-color: transparent;
+            margin: 17.32px 0;
+            z-index: 1;
+        }
+
+        .hexagon:before,
+        .hexagon:after {
+            content: "";
+            position: absolute;
+            width: 0;
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+        }
+
+        .hexagon:before {
+            bottom: 100%;
+            border-bottom: 17.32px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .hexagon:after {
+            top: 100%;
+            border-top: 17.32px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .hexagon-1 {
+            top: 20%;
+            left: 10%;
+            animation: hexagonRotate 10s linear infinite;
+        }
+
+        .hexagon-2 {
+            top: 30%;
+            right: 15%;
+            animation: hexagonRotate 12s linear infinite reverse;
+        }
+
+        .hexagon-3 {
+            bottom: 25%;
+            left: 20%;
+            animation: hexagonRotate 15s linear infinite;
+        }
+
+        .hexagon-4 {
+            bottom: 35%;
+            right: 10%;
+            animation: hexagonRotate 8s linear infinite reverse;
+        }
+
+        .hexagon-5 {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: hexagonRotate 20s linear infinite;
+        }
+
+        @keyframes hexagonRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Scanning line */
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #00ff00, transparent);
+            animation: scan 8s linear infinite;
+            z-index: 2;
+        }
+
+        @keyframes scan {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(100vh);
+            }
+        }
+
+        /* Data stream */
+        .data-stream {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .data {
+            position: absolute;
+            font-size: 10px;
+            color: rgba(0, 255, 255, 0.7);
+            white-space: nowrap;
+            animation: dataFlow 15s linear infinite;
+        }
+
+        .data-1 {
+            top: 10%;
+            animation-delay: 0s;
+        }
+
+        .data-2 {
+            top: 25%;
+            animation-delay: 3s;
+        }
+
+        .data-3 {
+            top: 40%;
+            animation-delay: 6s;
+        }
+
+        .data-4 {
+            top: 55%;
+            animation-delay: 9s;
+        }
+
+        .data-5 {
+            top: 70%;
+            animation-delay: 12s;
+        }
+
+        @keyframes dataFlow {
+            0% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        /* Cyber rain */
+        .cyber-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .rain {
+            position: absolute;
+            width: 2px;
+            height: 20px;
+            background: linear-gradient(transparent, #00ff00);
+            animation: rainFall 3s linear infinite;
+        }
+
+        .rain:nth-child(1) { left: 5%; animation-delay: 0s; }
+        .rain:nth-child(2) { left: 10%; animation-delay: 0.3s; }
+        .rain:nth-child(3) { left: 15%; animation-delay: 0.6s; }
+        .rain:nth-child(4) { left: 20%; animation-delay: 0.9s; }
+        .rain:nth-child(5) { left: 25%; animation-delay: 1.2s; }
+        .rain:nth-child(6) { left: 30%; animation-delay: 1.5s; }
+        .rain:nth-child(7) { left: 35%; animation-delay: 1.8s; }
+        .rain:nth-child(8) { left: 40%; animation-delay: 2.1s; }
+        .rain:nth-child(9) { left: 45%; animation-delay: 2.4s; }
+        .rain:nth-child(10) { left: 50%; animation-delay: 2.7s; }
+        .rain:nth-child(11) { left: 55%; animation-delay: 3s; }
+        .rain:nth-child(12) { left: 60%; animation-delay: 3.3s; }
+        .rain:nth-child(13) { left: 65%; animation-delay: 3.6s; }
+        .rain:nth-child(14) { left: 70%; animation-delay: 3.9s; }
+        .rain:nth-child(15) { left: 75%; animation-delay: 4.2s; }
+        .rain:nth-child(16) { left: 80%; animation-delay: 4.5s; }
+        .rain:nth-child(17) { left: 85%; animation-delay: 4.8s; }
+        .rain:nth-child(18) { left: 90%; animation-delay: 5.1s; }
+        .rain:nth-child(19) { left: 95%; animation-delay: 5.4s; }
+        .rain:nth-child(20) { left: 100%; animation-delay: 5.7s; }
+
+        @keyframes rainFall {
+            0% {
+                transform: translateY(-100vh);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        /* UI elements */
+        .ui-element {
+            position: absolute;
+            border: 1px solid rgba(0, 255, 255, 0.5);
+            animation: uiPulse 3s ease-in-out infinite;
+        }
+
+        .ui-element-1 {
+            top: 15%;
+            left: 10%;
+            width: 80px;
+            height: 40px;
+            animation-delay: 0s;
+        }
+
+        .ui-element-2 {
+            top: 25%;
+            right: 15%;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            animation-delay: 0.5s;
+        }
+
+        .ui-element-3 {
+            bottom: 20%;
+            left: 15%;
+            width: 100px;
+            height: 30px;
+            animation-delay: 1s;
+        }
+
+        .ui-element-4 {
+            bottom: 30%;
+            right: 10%;
+            width: 70px;
+            height: 70px;
+            transform: rotate(45deg);
+            animation-delay: 1.5s;
+        }
+
+        @keyframes uiPulse {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.05);
+            }
+        }
+
+        /* Binary code */
+        .binary {
+            position: absolute;
+            font-size: 8px;
+            color: rgba(0, 255, 255, 0.4);
+            font-family: monospace;
+            animation: binaryFade 5s ease-in-out infinite;
+        }
+
+        .binary-1 {
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .binary-2 {
+            top: 20%;
+            right: 8%;
+            animation-delay: 1s;
+        }
+
+        .binary-3 {
+            bottom: 15%;
+            left: 10%;
+            animation-delay: 2s;
+        }
+
+        .binary-4 {
+            bottom: 25%;
+            right: 5%;
+            animation-delay: 3s;
+        }
+
+        @keyframes binaryFade {
+            0%, 100% {
+                opacity: 0.2;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        /* Radar elements */
+        .radar {
+            position: absolute;
+            border: 2px solid rgba(0, 255, 0, 0.3);
+            border-radius: 50%;
+            animation: radarPulse 4s ease-in-out infinite;
+        }
+
+        .radar-1 {
+            top: 30%;
+            left: 20%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 0s;
+        }
+
+        .radar-2 {
+            bottom: 35%;
+            right: 25%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 2s;
+        }
+
+        @keyframes radarPulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.6;
+            }
+        }
+
+        /* Wave effect */
+        .wave {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(0deg, rgba(0, 255, 255, 0.1), transparent);
+            animation: waveMove 10s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        @keyframes waveMove {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Circuit lines */
+        .circuit-line {
+            position: absolute;
+            background: rgba(0, 255, 255, 0.3);
+            animation: circuitGlow 3s ease-in-out infinite;
+        }
+
+        .circuit-line-h {
+            height: 1px;
+            width: 100px;
+        }
+
+        .circuit-line-v {
+            width: 1px;
+            height: 100px;
+        }
+
+        .circuit-line-1 {
+            top: 15%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .circuit-line-2 {
+            top: 10%;
+            left: 20%;
+            animation-delay: 0.5s;
+        }
+
+        .circuit-line-3 {
+            top: 75%;
+            right: 15%;
+            animation-delay: 1s;
+        }
+
+        .circuit-line-4 {
+            bottom: 20%;
+            right: 25%;
+            animation-delay: 1.5s;
+        }
+
+        .circuit-line-5 {
+            top: 45%;
+            left: 5%;
+            animation-delay: 2s;
+        }
+
+        .circuit-line-6 {
+            top: 40%;
+            right: 10%;
+            animation-delay: 2.5s;
+        }
+
+        @keyframes circuitGlow {
+            0%, 100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* Pulse rings */
+        .pulse-ring {
+            position: absolute;
+            border: 2px solid rgba(255, 0, 255, 0.5);
+            border-radius: 50%;
+            animation: pulseRingExpand 4s ease-out infinite;
+        }
+
+        .pulse-ring-1 {
+            top: 20%;
+            left: 30%;
+            width: 50px;
+            height: 50px;
+            animation-delay: 0s;
+        }
+
+        .pulse-ring-2 {
+            top: 60%;
+            right: 20%;
+            width: 70px;
+            height: 70px;
+            animation-delay: 1.5s;
+        }
+
+        .pulse-ring-3 {
+            bottom: 30%;
+            left: 40%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 3s;
+        }
+
+        @keyframes pulseRingExpand {
+            0% {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        /* Cyber frame */
+        .cyber-frame {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .cyber-corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #00ffff;
+        }
+
+        .corner-1 {
+            top: -2px;
+            left: -2px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .corner-2 {
+            top: -2px;
+            right: -2px;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .corner-3 {
+            bottom: -2px;
+            left: -2px;
+            border-right: none;
+            border-top: none;
+        }
+
+        .corner-4 {
+            bottom: -2px;
+            right: -2px;
+            border-left: none;
+            border-top: none;
+        }
+
+        /* HUD elements */
+        .hud-element {
+            position: absolute;
+            border: 1px solid rgba(0, 255, 255, 0.5);
+            background: rgba(0, 255, 255, 0.05);
+            animation: hudFlicker 5s ease-in-out infinite;
+        }
+
+        .hud-1 {
+            top: 20px;
+            left: 20px;
+            width: 150px;
+            height: 50px;
+            animation-delay: 0s;
+        }
+
+        .hud-2 {
+            top: 20px;
+            right: 20px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            animation-delay: 1s;
+        }
+
+        .hud-3 {
+            bottom: 20px;
+            left: 20px;
+            width: 200px;
+            height: 30px;
+            animation-delay: 2s;
+        }
+
+        .hud-4 {
+            bottom: 20px;
+            right: 20px;
+            width: 120px;
+            height: 80px;
+            animation-delay: 3s;
+        }
+
+        @keyframes hudFlicker {
+            0%, 100% {
+                opacity: 0.5;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            20% {
+                opacity: 0.3;
+            }
+            30% {
+                opacity: 0.7;
+            }
+            40% {
+                opacity: 0.4;
+            }
+            50% {
+                opacity: 0.6;
+            }
+            60% {
+                opacity: 0.3;
+            }
+            70% {
+                opacity: 0.8;
+            }
+            80% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.6;
+            }
+        }
+
+        /* Floating elements */
+        .floating-element {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 0, 255, 0.2);
+            border: 1px solid rgba(255, 0, 255, 0.5);
+            animation: floating 6s ease-in-out infinite;
+        }
+
+        .floating-element-1 {
+            top: 25%;
+            left: 15%;
+            animation-delay: 0s;
+            border-radius: 50%;
+        }
+
+        .floating-element-2 {
+            top: 35%;
+            right: 20%;
+            animation-delay: 1.5s;
+            transform: rotate(45deg);
+        }
+
+        .floating-element-3 {
+            bottom: 40%;
+            left: 25%;
+            animation-delay: 3s;
+            border-radius: 50%;
+        }
+
+        .floating-element-4 {
+            bottom: 30%;
+            right: 15%;
+            animation-delay: 4.5s;
+            transform: rotate(45deg);
+        }
+
+        @keyframes floating {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-20px) rotate(90deg);
+            }
+            50% {
+                transform: translateY(0) rotate(180deg);
+            }
+            75% {
+                transform: translateY(20px) rotate(270deg);
+            }
+        }
+
+        /* Neon glow effects */
+        .neon-glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(20px);
+            animation: neonGlowPulse 4s ease-in-out infinite;
+        }
+
+        .neon-glow-1 {
+            top: 10%;
+            left: 10%;
+            width: 100px;
+            height: 100px;
+            background: rgba(0, 255, 255, 0.3);
+            animation-delay: 0s;
+        }
+
+        .neon-glow-2 {
+            top: 20%;
+            right: 15%;
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 0, 255, 0.3);
+            animation-delay: 1s;
+        }
+
+        .neon-glow-3 {
+            bottom: 25%;
+            left: 20%;
+            width: 120px;
+            height: 120px;
+            background: rgba(0, 0, 255, 0.3);
+            animation-delay: 2s;
+        }
+
+        .neon-glow-4 {
+            bottom: 15%;
+            right: 10%;
+            width: 90px;
+            height: 90px;
+            background: rgba(0, 255, 255, 0.3);
+            animation-delay: 3s;
+        }
+
+        @keyframes neonGlowPulse {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(1.1);
+            }
+        }
+
+        /* Cyber decorations */
+        .cyber-decoration {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(0, 255, 255, 0.5);
+            animation: cyberDecorationRotate 10s linear infinite;
+        }
+
+        .cyber-decoration-1 {
+            top: 15%;
+            left: 25%;
+            animation-delay: 0s;
+            transform: rotate(45deg);
+        }
+
+        .cyber-decoration-2 {
+            top: 30%;
+            right: 30%;
+            animation-delay: 2.5s;
+            border-radius: 50%;
+        }
+
+        .cyber-decoration-3 {
+            bottom: 35%;
+            left: 35%;
+            animation-delay: 5s;
+            transform: rotate(45deg);
+        }
+
+        .cyber-decoration-4 {
+            bottom: 20%;
+            right: 25%;
+            animation-delay: 7.5s;
+            border-radius: 50%;
+        }
+
+        @keyframes cyberDecorationRotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Holographic elements */
+        .holographic-element {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.1), rgba(0, 255, 255, 0.1));
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            animation: holographicShimmer 3s ease-in-out infinite;
+        }
+
+        .holographic-element-1 {
+            top: 20%;
+            left: 30%;
+            animation-delay: 0s;
+            border-radius: 10px;
+        }
+
+        .holographic-element-2 {
+            top: 40%;
+            right: 25%;
+            animation-delay: 1s;
+            border-radius: 50%;
+        }
+
+        .holographic-element-3 {
+            bottom: 30%;
+            left: 40%;
+            animation-delay: 2s;
+            border-radius: 10px;
+        }
+
+        .holographic-element-4 {
+            bottom: 25%;
+            right: 35%;
+            animation-delay: 3s;
+            border-radius: 50%;
+        }
+
+        @keyframes holographicShimmer {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(1) rotate(0deg);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.05) rotate(180deg);
+            }
+        }
+
+        /* Cyber animations */
+        .cyber-animation {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border: 2px solid rgba(0, 255, 255, 0.5);
+            animation: cyberAnimationComplex 8s ease-in-out infinite;
+        }
+
+        .cyber-animation-1 {
+            top: 25%;
+            left: 20%;
+            animation-delay: 0s;
+            border-radius: 50%;
+        }
+
+        .cyber-animation-2 {
+            top: 35%;
+            right: 15%;
+            animation-delay: 2s;
+            transform: rotate(45deg);
+        }
+
+        .cyber-animation-3 {
+            bottom: 40%;
+            left: 30%;
+            animation-delay: 4s;
+            border-radius: 50%;
+        }
+
+        .cyber-animation-4 {
+            bottom: 30%;
+            right: 25%;
+            animation-delay: 6s;
+            transform: rotate(45deg);
+        }
+
+        @keyframes cyberAnimationComplex {
+            0%, 100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 0.3;
+                border-color: rgba(0, 255, 255, 0.5);
+            }
+            25% {
+                transform: scale(1.2) rotate(90deg);
+                opacity: 0.6;
+                border-color: rgba(255, 0, 255, 0.5);
+            }
+            50% {
+                transform: scale(0.8) rotate(180deg);
+                opacity: 0.4;
+                border-color: rgba(0, 0, 255, 0.5);
+            }
+            75% {
+                transform: scale(1.1) rotate(270deg);
+                opacity: 0.7;
+                border-color: rgba(0, 255, 255, 0.5);
+            }
+        }
+
+        /* Cyber particles */
+        .cyber-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #00ffff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00ffff;
+            animation: cyberParticleFloat 15s infinite linear;
+        }
+
+        .cyber-particle-1 {
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .cyber-particle-2 {
+            top: 20%;
+            right: 15%;
+            animation-delay: 3.75s;
+        }
+
+        .cyber-particle-3 {
+            bottom: 25%;
+            left: 20%;
+            animation-delay: 7.5s;
+        }
+
+        .cyber-particle-4 {
+            bottom: 15%;
+            right: 10%;
+            animation-delay: 11.25s;
+        }
+
+        @keyframes cyberParticleFloat {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(100px, -100px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Cyber waves */
+        .cyber-wave {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ffff, transparent);
+            animation: cyberWaveMove 6s linear infinite;
+        }
+
+        .cyber-wave-1 {
+            top: 30%;
+            animation-delay: 0s;
+        }
+
+        .cyber-wave-2 {
+            top: 50%;
+            animation-delay: 2s;
+        }
+
+        .cyber-wave-3 {
+            top: 70%;
+            animation-delay: 4s;
+        }
+
+        @keyframes cyberWaveMove {
+            0% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        /* Cyber grid 2 */
+        .cyber-grid-2 {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(255, 0, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 255, 0.05) 1px, transparent 1px);
+            background-size: 100px 100px;
+            animation: gridMove2 15s linear infinite reverse;
+            z-index: -2;
+        }
+
+        @keyframes gridMove2 {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100px, -100px); }
+        }
+
+        /* Cyber lines 2 */
+        .cyber-line-2 {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #ff00ff, transparent);
+            animation: cyberLine2Move 10s linear infinite;
+        }
+
+        .cyber-line-2-1 {
+            top: 15%;
+            animation-delay: 0s;
+        }
+
+        .cyber-line-2-2 {
+            top: 35%;
+            animation-delay: 2.5s;
+        }
+
+        .cyber-line-2-3 {
+            top: 55%;
+            animation-delay: 5s;
+        }
+
+        .cyber-line-2-4 {
+            top: 75%;
+            animation-delay: 7.5s;
+        }
+
+        @keyframes cyberLine2Move {
+            0% {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+        }
+
+        /* Cyber circles */
+        .cyber-circle {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: cyberCirclePulse 8s ease-in-out infinite;
+        }
+
+        .cyber-circle-1 {
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .cyber-circle-2 {
+            top: 20%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+
+        .cyber-circle-3 {
+            bottom: 15%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        .cyber-circle-4 {
+            bottom: 25%;
+            right: 10%;
+            animation-delay: 6s;
+        }
+
+        @keyframes cyberCirclePulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.3;
+                border-color: rgba(0, 255, 255, 0.3);
+            }
+            25% {
+                transform: scale(1.2);
+                opacity: 0.6;
+                border-color: rgba(255, 0, 255, 0.3);
+            }
+            50% {
+                transform: scale(0.8);
+                opacity: 0.4;
+                border-color: rgba(0, 0, 255, 0.3);
+            }
+            75% {
+                transform: scale(1.1);
+                opacity: 0.7;
+                border-color: rgba(0, 255, 255, 0.3);
+            }
+        }
+
+        /* Cyber triangles */
+        .cyber-triangle {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-bottom: 50px solid rgba(0, 255, 255, 0.2);
+            z-index: 0;
+        }
+
+        .cyber-triangle-1 {
+            top: 10%;
+            left: 10%;
+            animation: cyberTriangle1 10s infinite;
+        }
+
+        .cyber-triangle-2 {
+            top: 20%;
+            right: 15%;
+            animation: cyberTriangle2 12s infinite;
+        }
+
+        .cyber-triangle-3 {
+            bottom: 15%;
+            left: 20%;
+            animation: cyberTriangle3 15s infinite;
+        }
+
+        .cyber-triangle-4 {
+            bottom: 25%;
+            right: 10%;
+            animation: cyberTriangle4 8s infinite;
+        }
+
+        @keyframes cyberTriangle1 {
+            0%, 100% {
+                transform: rotate(0deg);
+                border-bottom-color: rgba(0, 255, 255, 0.2);
+            }
+            25% {
+                transform: rotate(90deg);
+                border-bottom-color: rgba(255, 0, 255, 0.2);
+            }
+            50% {
+                transform: rotate(180deg);
+                border-bottom-color: rgba(0, 0, 255, 0.2);
+            }
+            75% {
+                transform: rotate(270deg);
+                border-bottom-color: rgba(0, 255, 255, 0.2);
+            }
+        }
+
+        @keyframes cyberTriangle2 {
+            0%, 100% {
+                transform: rotate(0deg);
+                border-bottom-color: rgba(255, 0, 255, 0.2);
+            }
+            25% {
+                transform: rotate(-90deg);
+                border-bottom-color: rgba(0, 0, 255, 0.2);
+            }
+            50% {
+                transform: rotate(-180deg);
+                border-bottom-color: rgba(0, 255, 255, 0.2);
+            }
+            75% {
+                transform: rotate(-270deg);
+                border-bottom-color: rgba(255, 0, 255, 0.2);
+            }
+        }
+
+        @keyframes cyberTriangle3 {
+            0%, 100% {
+                transform: rotate(0deg);
+                border-bottom-color: rgba(0, 0, 255, 0.2);
+            }
+            25% {
+                transform: rotate(45deg);
+                border-bottom-color: rgba(0, 255, 255, 0.2);
+            }
+            50% {
+                transform: rotate(90deg);
+                border-bottom-color: rgba(255, 0, 255, 0.2);
+            }
+            75% {
+                transform: rotate(135deg);
+                border-bottom-color: rgba(0, 0, 255, 0.2);
+            }
+        }
+
+        @keyframes cyberTriangle4 {
+            0%, 100% {
+                transform: rotate(0deg);
+                border-bottom-color: rgba(0, 255, 255, 0.2);
+            }
+            25% {
+                transform: rotate(-45deg);
+                border-bottom-color: rgba(0, 0, 255, 0.2);
+            }
+            50% {
+                transform: rotate(-90deg);
+                border-bottom-color: rgba(255, 0, 255, 0.2);
+            }
+            75% {
+                transform: rotate(-135deg);
+                border-bottom-color: rgba(0, 255, 255, 0.2);
+            }
+        }
+
+        /* Cyber squares */
+        .cyber-square {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            z-index: 0;
+        }
+
+        .cyber-square-1 {
+            top: 10%;
+            left: 10%;
+            animation: cyberSquare1 10s infinite;
+        }
+
+        .cyber-square-2 {
+            top: 20%;
+            right: 15%;
+            animation: cyberSquare2 12s infinite;
+        }
+
+        .cyber-square-3 {
+            bottom: 15%;
+            left: 20%;
+            animation: cyberSquare3 15s infinite;
+        }
+
+        .cyber-square-4 {
+            bottom: 25%;
+            right: 10%;
+            animation: cyberSquare4 8s infinite;
+        }
+
+        @keyframes cyberSquare1 {
+            0%, 100% {
+                transform: scale(1) rotate(0deg);
+                border-color: rgba(0, 255, 255, 0.3);
+            }
+            25% {
+                transform: scale(1.1) rotate(90deg);
+                border-color: rgba(255, 0, 255, 0.3);
+            }
+            50% {
+                transform: scale(0.9) rotate(180deg);
+                border-color: rgba(0, 0, 255, 0.3);
+            }
+            75% {
+                transform: scale(1.05) rotate(270deg);
+                border-color: rgba(0, 255, 255, 0.3);
+            }
+        }
+
+        @keyframes cyberSquare2 {
+            0%, 100% {
+                transform: scale(1) rotate(0deg);
+                border-color: rgba(255, 0, 255, 0.3);
+            }
+            25% {
+                transform: scale(0.9) rotate(-90deg);
+                border-color: rgba(0, 0, 255, 0.3);
+            }
+            50% {
+                transform: scale(1.1) rotate(-180deg);
+                border-color: rgba(0, 255, 255, 0.3);
+            }
+            75% {
+                transform: scale(1.05) rotate(-270deg);
+                border-color: rgba(255, 0, 255, 0.3);
+            }
+        }
+
+        @keyframes cyberSquare3 {
+            0%, 100% {
+                transform: scale(1) rotate(0deg);
+                border-color: rgba(0, 0, 255, 0.3);
+            }
+            25% {
+                transform: scale(1.05) rotate(45deg);
+                border-color: rgba(0, 255, 255, 0.3);
+            }
+            50% {
+                transform: scale(0.95) rotate(90deg);
+                border-color: rgba(255, 0, 255, 0.3);
+            }
+            75% {
+                transform: scale(1.1) rotate(135deg);
+                border-color: rgba(0, 0, 255, 0.3);
+            }
+        }
+
+        @keyframes cyberSquare4 {
+            0%, 100% {
+                transform: scale(1) rotate(0deg);
+                border-color: rgba(0, 255, 255, 0.3);
+            }
+            25% {
+                transform: scale(1.1) rotate(-45deg);
+                border-color: rgba(0, 0, 255, 0.3);
+            }
+            50% {
+                transform: scale(0.9) rotate(-90deg);
+                border-color: rgba(255, 0, 255, 0.3);
+            }
+            75% {
+                transform: scale(1.05) rotate(-135deg);
+                border-color: rgba(0, 255, 255, 0.3);
+            }
+        }
+
+        /* Cyber hexagons */
+        .cyber-hexagon {
+            position: absolute;
+            width: 60px;
+            height: 33px;
+            background-color: transparent;
+            margin: 16.5px 0;
+            z-index: 0;
+        }
+
+        .cyber-hexagon:before,
+        .cyber-hexagon:after {
+            content: "";
+            position: absolute;
+            width: 0;
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+        }
+
+        .cyber-hexagon:before {
+            bottom: 100%;
+            border-bottom: 16.5px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .cyber-hexagon:after {
+            top: 100%;
+            border-top: 16.5px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .cyber-hexagon-1 {
+            top: 10%;
+            left: 10%;
+            animation: cyberHexagon1 10s infinite;
+        }
+
+        .cyber-hexagon-2 {
+            top: 20%;
+            right: 15%;
+            animation: cyberHexagon2 12s infinite;
+        }
+
+        .cyber-hexagon-3 {
+            bottom: 15%;
+            left: 20%;
+            animation: cyberHexagon3 15s infinite;
+        }
+
+        .cyber-hexagon-4 {
+            bottom: 25%;
+            right: 10%;
+            animation: cyberHexagon4 8s infinite;
+        }
+
+        @keyframes cyberHexagon1 {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            25% {
+                transform: rotate(90deg);
+            }
+            50% {
+                transform: rotate(180deg);
+            }
+            75% {
+                transform: rotate(270deg);
+            }
+        }
+
+        @keyframes cyberHexagon2 {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            25% {
+                transform: rotate(-90deg);
+            }
+            50% {
+                transform: rotate(-180deg);
+            }
+            75% {
+                transform: rotate(-270deg);
+            }
+        }
+
+        @keyframes cyberHexagon3 {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            25% {
+                transform: rotate(45deg);
+            }
+            50% {
+                transform: rotate(90deg);
+            }
+            75% {
+                transform: rotate(135deg);
+            }
+        }
+
+        @keyframes cyberHexagon4 {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            25% {
+                transform: rotate(-45deg);
+            }
+            50% {
+                transform: rotate(-90deg);
+            }
+            75% {
+                transform: rotate(-135deg);
+            }
+        }
+
+        /* Cyber stars */
+        .cyber-star {
+            position: absolute;
+            display: block;
+            width: 0px;
+            height: 0px;
+            border-right: 10px solid transparent;
+            border-bottom: 7px solid rgba(0, 255, 255, 0.3);
+            border-left: 10px solid transparent;
+            transform: rotate(35deg);
+            z-index: 0;
+        }
+
+        .cyber-star:before {
+            border-bottom: 8px solid rgba(0, 255, 255, 0.3);
+            border-left: 3px solid transparent;
+            border-right: 3px solid transparent;
+            position: absolute;
+            height: 0;
+            width: 0;
+            top: -5px;
+            left: -6px;
+            display: block;
+            content: '';
+            transform: rotate(-35deg);
+        }
+
+        .cyber-star:after {
+            position: absolute;
+            display: block;
+            top: 0px;
+            left: -10px;
+            width: 0px;
+            height: 0px;
+            border-right: 10px solid transparent;
+            border-bottom: 7px solid rgba(0, 255, 255, 0.3);
+            border-left: 10px solid transparent;
+            transform: rotate(-70deg);
+            content: '';
+        }
+
+        .cyber-star-1 {
+            top: 10%;
+            left: 10%;
+            animation: cyberStar1 10s infinite;
+        }
+
+        .cyber-star-2 {
+            top: 20%;
+            right: 15%;
+            animation: cyberStar2 12s infinite;
+        }
+
+        .cyber-star-3 {
+            bottom: 15%;
+            left: 20%;
+            animation: cyberStar3 15s infinite;
+        }
+
+        .cyber-star-4 {
+            bottom: 25%;
+            right: 10%;
+            animation: cyberStar4 8s infinite;
+        }
+
+        @keyframes cyberStar1 {
+            0%, 100% {
+                transform: rotate(35deg) scale(1);
+                opacity: 0.3;
+            }
+            25% {
+                transform: rotate(125deg) scale(1.1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: rotate(215deg) scale(0.9);
+                opacity: 0.4;
+            }
+            75% {
+                transform: rotate(305deg) scale(1.05);
+                opacity: 0.6;
+            }
+        }
+
+        @keyframes cyberStar2 {
+            0%, 100% {
+                transform: rotate(35deg) scale(1);
+                opacity: 0.3;
+            }
+            25% {
+                transform: rotate(-55deg) scale(0.9);
+                opacity: 0.5;
+            }
+            50% {
+                transform: rotate(-145deg) scale(1.1);
+                opacity: 0.4;
+            }
+            75% {
+                transform: rotate(-235deg) scale(1.05);
+                opacity: 0.6;
+            }
+        }
+
+        @keyframes cyberStar3 {
+            0%, 100% {
+                transform: rotate(35deg) scale(1);
+                opacity: 0.3;
+            }
+            25% {
+                transform: rotate(80deg) scale(1.05);
+                opacity: 0.5;
+            }
+            50% {
+                transform: rotate(125deg) scale(0.95);
+                opacity: 0.4;
+            }
+            75% {
+                transform: rotate(170deg) scale(1.1);
+                opacity: 0.6;
+            }
+        }
+
+        @keyframes cyberStar4 {
+            0%, 100% {
+                transform: rotate(35deg) scale(1);
+                opacity: 0.3;
+            }
+            25% {
+                transform: rotate(-10deg) scale(1.1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: rotate(-55deg) scale(0.9);
+                opacity: 0.4;
+            }
+            75% {
+                transform: rotate(-100deg) scale(1.05);
+                opacity: 0.6;
+            }
+        }
+
+        /* Cyber diamonds */
+        .cyber-diamond {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 255, 255, 0.1);
+            transform: rotate(45deg);
+            z-index: 0;
+        }
+
+        .cyber-diamond-1 {
+            top: 10%;
+            left: 10%;
+            animation: cyberDiamond1 10s infinite;
+        }
+
+        .cyber-diamond-2 {
+            top: 20%;
+            right: 15%;
+            animation: cyberDiamond2 12s infinite;
+        }
+
+        .cyber-diamond-3 {
+            bottom: 15%;
+            left: 20%;
+            animation: cyberDiamond3 15s infinite;
+        }
+
+        .cyber-diamond-4 {
+            bottom: 25%;
+            right: 10%;
+            animation: cyberDiamond4 8s infinite;
+        }
+
+        @keyframes cyberDiamond1 {
+            0%, 100% {
+                transform: rotate(45deg) scale(1);
+                background: rgba(0, 255, 255, 0.1);
+            }
+            25% {
+                transform: rotate(135deg) scale(1.1);
+                background: rgba(255, 0, 255, 0.1);
+            }
+            50% {
+                transform: rotate(225deg) scale(0.9);
+                background: rgba(0, 0, 255, 0.1);
+            }
+            75% {
+                transform: rotate(315deg) scale(1.05);
+                background: rgba(0, 255, 255, 0.1);
+            }
+        }
+
+        @keyframes cyberDiamond2 {
+            0%, 100% {
+                transform: rotate(45deg) scale(1);
+                background: rgba(255, 0, 255, 0.1);
+            }
+            25% {
+                transform: rotate(-45deg) scale(0.9);
+                background: rgba(0, 0, 255, 0.1);
+            }
+            50% {
+                transform: rotate(-135deg) scale(1.1);
+                background: rgba(0, 255, 255, 0.1);
+            }
+            75% {
+                transform: rotate(-225deg) scale(1.05);
+                background: rgba(255, 0, 255, 0.1);
+            }
+        }
+
+        @keyframes cyberDiamond3 {
+            0%, 100% {
+                transform: rotate(45deg) scale(1);
+                background: rgba(0, 0, 255, 0.1);
+            }
+            25% {
+                transform: rotate(90deg) scale(1.05);
+                background: rgba(0, 255, 255, 0.1);
+            }
+            50% {
+                transform: rotate(135deg) scale(0.95);
+                background: rgba(255, 0, 255, 0.1);
+            }
+            75% {
+                transform: rotate(180deg) scale(1.1);
+                background: rgba(0, 0, 255, 0.1);
+            }
+        }
+
+        @keyframes cyberDiamond4 {
+            0%, 100% {
+                transform: rotate(45deg) scale(1);
+                background: rgba(0, 255, 255, 0.1);
+            }
+            25% {
+                transform: rotate(0deg) scale(1.1);
+                background: rgba(0, 0, 255, 0.1);
+            }
+            50% {
+                transform: rotate(-45deg) scale(0.9);
+                background: rgba(255, 0, 255, 0.1);
+            }
+            75% {
+                transform: rotate(-90deg) scale(1.05);
+                background: rgba(0, 255, 255, 0.1);
+            }
+        }
+
+        /* Main container */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            z-index: 100;
+        }
+
+        .cyber-card {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(26, 0, 51, 0.9));
+            border: 2px solid #00ffff;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow:
+                0 0 50px rgba(0, 255, 255, 0.5),
+                inset 0 0 50px rgba(0, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .holographic-card {
+            background: linear-gradient(135deg,
+                rgba(0, 0, 0, 0.9),
+                rgba(26, 0, 51, 0.9),
+                rgba(0, 26, 51, 0.9));
+            animation: holographicShift 5s ease-in-out infinite;
+        }
+
+        @keyframes holographicShift {
+            0%, 100% {
+                background: linear-gradient(135deg,
+                    rgba(0, 0, 0, 0.9),
+                    rgba(26, 0, 51, 0.9),
+                    rgba(0, 26, 51, 0.9));
+            }
+            25% {
+                background: linear-gradient(135deg,
+                    rgba(26, 0, 51, 0.9),
+                    rgba(0, 26, 51, 0.9),
+                    rgba(0, 0, 0, 0.9));
+            }
+            50% {
+                background: linear-gradient(135deg,
+                    rgba(0, 26, 51, 0.9),
+                    rgba(0, 0, 0, 0.9),
+                    rgba(26, 0, 51, 0.9));
+            }
+            75% {
+                background: linear-gradient(135deg,
+                    rgba(0, 0, 0, 0.9),
+                    rgba(26, 0, 51, 0.9),
+                    rgba(0, 26, 51, 0.9));
+            }
+        }
+
+        .scanlines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                transparent 50%,
+                rgba(0, 255, 255, 0.03) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            animation: scanlines 8s linear infinite;
+        }
+
+        @keyframes scanlines {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(10px);
+            }
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .birthday-title {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #00ffff, #ff00ff, #00ffff);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: bold;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .glitch {
+            position: relative;
+            animation: glitch 2s infinite;
+        }
+
+        .glitch:before,
+        .glitch:after {
+            content: 'HAPPY BIRTHDAY';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #00ffff, #ff00ff, #00ffff);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite;
+        }
+
+        .glitch:before {
+            animation: glitch-1 0.5s infinite;
+            color: #00ffff;
+            z-index: -1;
+        }
+
+        .glitch:after {
+            animation: glitch-2 0.5s infinite;
+            color: #ff00ff;
+            z-index: -2;
+        }
+
+        @keyframes glitch-1 {
+            0%, 100% {
+                clip-path: inset(0 0 0 0);
+                transform: translate(0);
+            }
+            20% {
+                clip-path: inset(20% 0 30% 0);
+                transform: translate(-2px, 2px);
+            }
+            40% {
+                clip-path: inset(50% 0 20% 0);
+                transform: translate(2px, -2px);
+            }
+            60% {
+                clip-path: inset(10% 0 60% 0);
+                transform: translate(-2px, 0);
+            }
+            80% {
+                clip-path: inset(80% 0 5% 0);
+                transform: translate(2px, 0);
+            }
+        }
+
+        @keyframes glitch-2 {
+            0%, 100% {
+                clip-path: inset(0 0 0 0);
+                transform: translate(0);
+            }
+            20% {
+                clip-path: inset(60% 0 10% 0);
+                transform: translate(2px, -1px);
+            }
+            40% {
+                clip-path: inset(20% 0 50% 0);
+                transform: translate(-2px, 1px);
+            }
+            60% {
+                clip-path: inset(30% 0 40% 0);
+                transform: translate(1px, -1px);
+            }
+            80% {
+                clip-path: inset(5% 0 80% 0);
+                transform: translate(-1px, 1px);
+            }
+        }
+
+        .name-field {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid #00ffff;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            color: #00ffff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: fieldPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes fieldPulse {
+            0%, 100% {
+                box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+            }
+        }
+
+        .birthday-message {
+            color: #ffffff;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            font-size: 1rem;
+            text-align: center;
+            opacity: 0.9;
+        }
+
+        .cyber-progress {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid #00ffff;
+            border-radius: 10px;
+            height: 20px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .cyber-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00ffff, #ff00ff);
+            width: 75%;
+            animation: progressGlow 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        .cyber-progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: progressShine 2s infinite;
+        }
+
+        @keyframes progressGlow {
+            0%, 100% {
+                box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(255, 0, 255, 0.8);
+            }
+        }
+
+        @keyframes progressShine {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: #00ff00;
+            border-radius: 50%;
+            margin-right: 10px;
+            animation: statusPulse 1s ease-in-out infinite;
+            box-shadow: 0 0 10px #00ff00;
+        }
+
+        @keyframes statusPulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(1.2);
+            }
+        }
+
+        .status-text {
+            color: #00ff00;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .neon-button {
+            padding: 12px 25px;
+            border: 2px solid;
+            border-radius: 8px;
+            background: transparent;
+            color: #ffffff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            font-weight: bold;
+        }
+
+        .neon-button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+            z-index: -1;
+        }
+
+        .neon-button:hover:before {
+            left: 100%;
+        }
+
+        .neon-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-celebrate {
+            border-color: #00ffff;
+            color: #00ffff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .btn-celebrate:hover {
+            background: rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+        }
+
+        .btn-enter {
+            border-color: #ff00ff;
+            color: #ff00ff;
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+        }
+
+        .btn-enter:hover {
+            background: rgba(255, 0, 255, 0.1);
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.8);
+        }
+
+        .btn-enjoy {
+            border-color: #00ff00;
+            color: #00ff00;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+
+        .btn-enjoy:hover {
+            background: rgba(0, 255, 0, 0.1);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+        }
+
+        .loading-dots {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 20px;
+        }
+
+        .loading-dots span {
+            width: 10px;
+            height: 10px;
+            background: #00ffff;
+            border-radius: 50%;
+            animation: loadingDot 1.5s ease-in-out infinite;
+        }
+
+        .loading-dots span:nth-child(1) { animation-delay: 0s; }
+        .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes loadingDot {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.5);
+                opacity: 1;
+            }
+        }
+
+        .cyber-alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid #ff0000;
+            color: #ff0000;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            animation: alertBlink 2s ease-in-out infinite;
+            z-index: 1000;
+        }
+
+        @keyframes alertBlink {
+            0%, 100% {
+                opacity: 0.7;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* Confetti styles */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #00ffff;
+            animation: confettiFall 3s linear;
+            z-index: 9999;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Message popup styles */
+        .message-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(26, 0, 51, 0.95));
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            z-index: 10000;
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.8);
+            display: none;
+        }
+
+        .message-popup.show {
+            display: block;
+            animation: popupShow 0.3s ease-out;
+        }
+
+        @keyframes popupShow {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .message-popup h2 {
+            color: #00ffff;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .message-popup p {
+            color: #ffffff;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .message-popup button {
+            padding: 10px 20px;
+            background: transparent;
+            border: 2px solid #00ffff;
+            color: #00ffff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .message-popup button:hover {
+            background: rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+        }
+
+        /* Fireworks styles */
+        .firework {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: #00ffff;
+            border-radius: 50%;
+            animation: fireworkExplode 1s ease-out;
+            z-index: 9998;
+        }
+
+        @keyframes fireworkExplode {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .birthday-title {
+                font-size: 2rem;
+            }
+
+            .button-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .neon-button {
+                width: 100%;
+                max-width: 250px;
+            }
+
+            .cyber-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Page loader -->
+    <div class="page-loader">
+        <div class="loader-text">INITIALIZING CYBER SYSTEM...</div>
+    </div>
+
+    <!-- Background elements -->
+    <div class="cyber-grid"></div>
+    <div class="cyber-grid-overlay"></div>
+    <div class="circuit-pattern"></div>
+    <div class="noise"></div>
+    <div class="glitch-overlay"></div>
+
+    <!-- Particles -->
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Cyber lines -->
+    <div class="cyber-lines">
+        <div class="cyber-line"></div>
+        <div class="cyber-line"></div>
+        <div class="cyber-line"></div>
+        <div class="cyber-line"></div>
+    </div>
+
+    <div class="cyber-line-vertical-container">
+        <div class="cyber-line-vertical"></div>
+        <div class="cyber-line-vertical"></div>
+        <div class="cyber-line-vertical"></div>
+        <div class="cyber-line-vertical"></div>
+        <div class="cyber-line-vertical"></div>
+    </div>
+
+    <!-- Decorative elements -->
+    <div class="decoration decoration-1"></div>
+    <div class="decoration decoration-2"></div>
+    <div class="decoration decoration-3"></div>
+    <div class="decoration decoration-4"></div>
+    <div class="decoration decoration-5"></div>
+
+    <!-- Hexagon elements -->
+    <div class="hexagon-container">
+        <div class="hexagon hexagon-1"></div>
+        <div class="hexagon hexagon-2"></div>
+        <div class="hexagon hexagon-3"></div>
+        <div class="hexagon hexagon-4"></div>
+        <div class="hexagon hexagon-5"></div>
+    </div>
+
+    <!-- Scanning line -->
+    <div class="scanline"></div>
+
+    <!-- Data stream -->
+    <div class="data-stream">
+        <div class="data data-1">01001000 01100001 01110000 01110000 01111001 00100000 01000010 01101001 01110010 01110100 01101000 01100100 01100001 01111001</div>
+        <div class="data data-2">01000011 01111001 01100010 01100101 01110010 01110000 01110101 01101110 01101011 00100000 01000011 01100101 01101100 01100101 01100010 01110010 01100001 01110100 01101001 01101111 01101110</div>
+        <div class="data data-3">01001110 01100101 01101111 01101110 00100000 01000111 01101100 01101111 01110111 00100000 01000101 01100110 01100110 01100101 01100011 01110100 01110011</div>
+        <div class="data data-4">01001000 01110101 01100100 00100000 01001001 01101110 01110100 01100101 01110010 01100110 01100001 01100011 01100101</div>
+        <div class="data data-5">01000100 01101001 01100111 01101001 01110100 01100001 01101100 00100000 01000100 01110101 01110100 01110101 01110010 01100101</div>
+    </div>
+
+    <!-- Cyber rain -->
+    <div class="cyber-rain">
+        <div class="rain"></div>
+        <div class="rain"></div>
+        <div class="rain"></div>
+        <div class="rain"></div>
+        <div class="rain"></div>
+        <div class="rain"></div>
+        <div class="rain"></div>
+        <div class="rain"></div>
+        <div class="rain"></div>
+        <div class="rain"></div>
+        <div class="rain"></div>
+        <div class="rain"></div>
+        <div class="rain"></div>
+        <div class="rain"></div>
+        <div class="rain"></div>
+        <div class="rain"></div>
+        <div class="rain"></div>
+        <div class="rain"></div>
+        <div class="rain"></div>
+        <div class="rain"></div>
+    </div>
+
+    <!-- UI elements -->
+    <div class="ui-element ui-element-1"></div>
+    <div class="ui-element ui-element-2"></div>
+    <div class="ui-element ui-element-3"></div>
+    <div class="ui-element ui-element-4"></div>
+
+    <!-- Binary code -->
+    <div class="binary binary-1">01001000 01100001 01110000 01110000 01111001</div>
+    <div class="binary binary-2">01000010 01101001 01110010 01110100 01101000</div>
+    <div class="binary binary-3">01000100 01100001 01111001</div>
+    <div class="binary binary-4">01000011 01100101 01101100 01100101 01100010 01110010 01100001 01110100 01100101</div>
+
+    <!-- Radar elements -->
+    <div class="radar radar-1"></div>
+    <div class="radar radar-2"></div>
+
+    <!-- Wave effect -->
+    <div class="wave"></div>
+
+    <!-- Circuit lines -->
+    <div class="circuit-line circuit-line-h circuit-line-1"></div>
+    <div class="circuit-line circuit-line-v circuit-line-2"></div>
+    <div class="circuit-line circuit-line-h circuit-line-3"></div>
+    <div class="circuit-line circuit-line-v circuit-line-4"></div>
+    <div class="circuit-line circuit-line-h circuit-line-5"></div>
+    <div class="circuit-line circuit-line-v circuit-line-6"></div>
+
+    <!-- Pulse rings -->
+    <div class="pulse-ring pulse-ring-1"></div>
+    <div class="pulse-ring pulse-ring-2"></div>
+    <div class="pulse-ring pulse-ring-3"></div>
+
+    <!-- Cyber frame -->
+    <div class="cyber-frame">
+        <div class="cyber-corner corner-1"></div>
+        <div class="cyber-corner corner-2"></div>
+        <div class="cyber-corner corner-3"></div>
+        <div class="cyber-corner corner-4"></div>
+    </div>
+
+    <!-- HUD elements -->
+    <div class="hud-element hud-1"></div>
+    <div class="hud-element hud-2"></div>
+    <div class="hud-element hud-3"></div>
+    <div class="hud-element hud-4"></div>
+
+    <!-- Floating elements -->
+    <div class="floating-element floating-element-1"></div>
+    <div class="floating-element floating-element-2"></div>
+    <div class="floating-element floating-element-3"></div>
+    <div class="floating-element floating-element-4"></div>
+
+    <!-- Neon glow effects -->
+    <div class="neon-glow neon-glow-1"></div>
+    <div class="neon-glow neon-glow-2"></div>
+    <div class="neon-glow neon-glow-3"></div>
+    <div class="neon-glow neon-glow-4"></div>
+
+    <!-- Cyber decorations -->
+    <div class="cyber-decoration cyber-decoration-1"></div>
+    <div class="cyber-decoration cyber-decoration-2"></div>
+    <div class="cyber-decoration cyber-decoration-3"></div>
+    <div class="cyber-decoration cyber-decoration-4"></div>
+
+    <!-- Holographic elements -->
+    <div class="holographic-element holographic-element-1"></div>
+    <div class="holographic-element holographic-element-2"></div>
+    <div class="holographic-element holographic-element-3"></div>
+    <div class="holographic-element holographic-element-4"></div>
+
+    <!-- Cyber animations -->
+    <div class="cyber-animation cyber-animation-1"></div>
+    <div class="cyber-animation cyber-animation-2"></div>
+    <div class="cyber-animation cyber-animation-3"></div>
+    <div class="cyber-animation cyber-animation-4"></div>
+
+    <!-- Cyber particles -->
+    <div class="cyber-particle cyber-particle-1"></div>
+    <div class="cyber-particle cyber-particle-2"></div>
+    <div class="cyber-particle cyber-particle-3"></div>
+    <div class="cyber-particle cyber-particle-4"></div>
+
+    <!-- Cyber waves -->
+    <div class="cyber-wave cyber-wave-1"></div>
+    <div class="cyber-wave cyber-wave-2"></div>
+    <div class="cyber-wave cyber-wave-3"></div>
+
+    <!-- Cyber grid 2 -->
+    <div class="cyber-grid-2"></div>
+
+    <!-- Cyber lines 2 -->
+    <div class="cyber-line-2 cyber-line-2-1"></div>
+    <div class="cyber-line-2 cyber-line-2-2"></div>
+    <div class="cyber-line-2 cyber-line-2-3"></div>
+    <div class="cyber-line-2 cyber-line-2-4"></div>
+
+    <!-- Cyber circles -->
+    <div class="cyber-circle cyber-circle-1"></div>
+    <div class="cyber-circle cyber-circle-2"></div>
+    <div class="cyber-circle cyber-circle-3"></div>
+    <div class="cyber-circle cyber-circle-4"></div>
+
+    <!-- Cyber triangles -->
+    <div class="cyber-triangle cyber-triangle-1"></div>
+    <div class="cyber-triangle cyber-triangle-2"></div>
+    <div class="cyber-triangle cyber-triangle-3"></div>
+    <div class="cyber-triangle cyber-triangle-4"></div>
+
+    <!-- Cyber squares -->
+    <div class="cyber-square cyber-square-1"></div>
+    <div class="cyber-square cyber-square-2"></div>
+    <div class="cyber-square cyber-square-3"></div>
+    <div class="cyber-square cyber-square-4"></div>
+
+    <!-- Cyber hexagons -->
+    <div class="cyber-hexagon cyber-hexagon-1"></div>
+    <div class="cyber-hexagon cyber-hexagon-2"></div>
+    <div class="cyber-hexagon cyber-hexagon-3"></div>
+    <div class="cyber-hexagon cyber-hexagon-4"></div>
+
+    <!-- Cyber stars -->
+    <div class="cyber-star cyber-star-1"></div>
+    <div class="cyber-star cyber-star-2"></div>
+    <div class="cyber-star cyber-star-3"></div>
+    <div class="cyber-star cyber-star-4"></div>
+
+    <!-- Cyber diamonds -->
+    <div class="cyber-diamond cyber-diamond-1"></div>
+    <div class="cyber-diamond cyber-diamond-2"></div>
+    <div class="cyber-diamond cyber-diamond-3"></div>
+    <div class="cyber-diamond cyber-diamond-4"></div>
+
+    <!-- Main container -->
+    <div class="container">
+        <div class="cyber-card holographic-card">
+            <div class="scanlines"></div>
+            <div class="card-content">
+                <h1 class="birthday-title glitch">HAPPY BIRTHDAY</h1>
+                <div class="name-field">BOSS</div>
+                <p class="birthday-message">
+                  Thank you for your leadership, support, and motivation. Working under your guidance is truly a privilege.
+Wishing you good health, success, and endless opportunities.
+
+                </p>
+                <div class="cyber-progress">
+                    <div class="cyber-progress-bar"></div>
+                </div>
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <div class="status-text">SYSTEM ONLINE</div>
+                </div>
+                <div class="button-container">
+                    <button class="neon-button btn-celebrate" onclick="celebrate()">CELEBRATE</button>
+                    <button class="neon-button btn-enter" onclick="enterCyberSpace()">ENTER</button>
+                    <button class="neon-button btn-enjoy" onclick="enjoyDay()">ENJOY YOUR DAY</button>
+                </div>
+                <div class="loading-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cyber alert -->
+    <div class="cyber-alert">SYSTEM ALERT: BIRTHDAY DETECTED</div>
+
+    <!-- Message popup -->
+    <div class="message-popup" id="messagePopup">
+        <h2 id="popupTitle">CYBER MESSAGE</h2>
+        <p id="popupMessage">Message content here</p>
+        <button onclick="closePopup()">CLOSE</button>
+    </div>
+
+    <script>
+        // Wait for page to load
+        window.addEventListener('load', function() {
+            // Remove page loader after animation
+            setTimeout(() => {
+                const loader = document.querySelector('.page-loader');
+                if (loader) {
+                    loader.style.display = 'none';
+                }
+            }, 4000);
+        });
+
+        // CELEBRATE button function
+        function celebrate() {
+            // Create confetti
+            createConfetti();
+
+            // Create fireworks
+            createFireworks();
+
+            // Show celebration message
+            showMessage('CELEBRATION MODE', '🎉 Welcome to the cyber celebration! 🎉\nYour birthday marks a new level in the digital realm. Level up achieved!');
+
+            // Play a sound effect (if you want to add audio)
+            // playSound('celebration');
+        }
+
+        // ENTER button function
+        function enterCyberSpace() {
+            // Show entering message
+            showMessage('ENTERING CYBERSPACE', '🚀 Initializing neural interface...\n🌐 Connecting to the matrix...\n✨ Welcome to your digital kingdom!');
+
+            // Add some visual effects
+            document.body.style.animation = 'glitch 0.3s';
+            setTimeout(() => {
+                document.body.style.animation = '';
+            }, 300);
+
+            // Change the status
+            const statusText = document.querySelector('.status-text');
+            const statusDot = document.querySelector('.status-dot');
+            statusText.textContent = 'CYBERSPACE ACTIVE';
+            statusDot.style.background = '#ff00ff';
+            statusDot.style.boxShadow = '0 0 10px #ff00ff';
+        }
+
+        // ENJOY YOUR DAY button function
+        function enjoyDay() {
+            // Show enjoy message
+            showMessage('ENJOY YOUR DAY', '🌟 Hope your day is filled with joy and your year with success.\n💫 Thank you for being a great leader and mentor!\n🎊 You deserve the best!');
+
+            // Create a gentle animation
+            const card = document.querySelector('.cyber-card');
+            card.style.animation = 'pulse 0.5s';
+            setTimeout(() => {
+                card.style.animation = '';
+            }, 500);
+
+            // Update progress bar to 100%
+            const progressBar = document.querySelector('.cyber-progress-bar');
+            progressBar.style.width = '100%';
+        }
+
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#00ffff', '#ff00ff', '#00ff00', '#ffff00', '#ff0000'];
+            const confettiCount = 50;
+
+            for (let i = 0; i < confettiCount; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    document.body.appendChild(confetti);
+
+                    // Remove confetti after animation
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 5000);
+                }, i * 50);
+            }
+        }
+
+        // Create fireworks effect
+        function createFireworks() {
+            const colors = ['#00ffff', '#ff00ff', '#00ff00', '#ffff00', '#ff0000'];
+            const fireworkCount = 5;
+
+            for (let i = 0; i < fireworkCount; i++) {
+                setTimeout(() => {
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight / 2;
+                    createFireworkBurst(x, y, colors[Math.floor(Math.random() * colors.length)]);
+                }, i * 200);
+            }
+        }
+
+        // Create single firework burst
+        function createFireworkBurst(x, y, color) {
+            const particleCount = 20;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'firework';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.background = color;
+
+                // Calculate random direction
+                const angle = (Math.PI * 2 * i) / particleCount;
+                const velocity = 50 + Math.random() * 50;
+                const vx = Math.cos(angle) * velocity;
+                const vy = Math.sin(angle) * velocity;
+
+                particle.style.setProperty('--x', vx + 'px');
+                particle.style.setProperty('--y', vy + 'px');
+
+                document.body.appendChild(particle);
+
+                // Remove particle after animation
+                setTimeout(() => {
+                    particle.remove();
+                }, 1000);
+            }
+        }
+
+        // Show message popup
+        function showMessage(title, message) {
+            const popup = document.getElementById('messagePopup');
+            const popupTitle = document.getElementById('popupTitle');
+            const popupMessage = document.getElementById('popupMessage');
+
+            popupTitle.textContent = title;
+            popupMessage.textContent = message;
+            popup.classList.add('show');
+
+            // Auto close after 5 seconds
+            setTimeout(() => {
+                closePopup();
+            }, 5000);
+        }
+
+        // Close popup
+        function closePopup() {
+            const popup = document.getElementById('messagePopup');
+            popup.classList.remove('show');
+        }
+
+        // Add keyboard support
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closePopup();
+            }
+            if (e.key === '1') {
+                celebrate();
+            }
+            if (e.key === '2') {
+                enterCyberSpace();
+            }
+            if (e.key === '3') {
+                enjoyDay();
+            }
+        });
+
+        // Add some random cyber effects
+        setInterval(() => {
+            const randomElements = document.querySelectorAll('.particle, .cyber-particle');
+            if (randomElements.length > 0) {
+                const randomElement = randomElements[Math.floor(Math.random() * randomElements.length)];
+                randomElement.style.boxShadow = `0 0 ${Math.random() * 20 + 10}px #00ffff`;
+                setTimeout(() => {
+                    randomElement.style.boxShadow = '0 0 10px #00ffff';
+                }, 500);
+            }
+        }, 2000);
+
+        // Progress bar animation
+        const progressBar = document.querySelector('.cyber-progress-bar');
+        let progress = 75;
+        setInterval(() => {
+            progress = (progress + 1) % 101;
+            progressBar.style.width = progress + '%';
+        }, 100);
+
+        // Cyber alert random messages
+        const alertMessages = [
+            'SYSTEM ALERT: BIRTHDAY DETECTED',
+            'WARNING: HIGH CELEBRATION LEVELS',
+            'NOTICE: NEURAL INTERFACE ACTIVE',
+            'ALERT: DIGITAL PARTY MODE ENGAGED',
+            'SYSTEM: CYBER WARRIOR LEVEL UP'
+        ];
+
+        setInterval(() => {
+            const alert = document.querySelector('.cyber-alert');
+            const randomMessage = alertMessages[Math.floor(Math.random() * alertMessages.length)];
+            alert.textContent = randomMessage;
+        }, 5000);
+
+        // Add mouse trail effect
+        document.addEventListener('mousemove', (e) => {
+            if (Math.random() > 0.95) {
+                const trail = document.createElement('div');
+                trail.style.position = 'fixed';
+                trail.style.left = e.clientX + 'px';
+                trail.style.top = e.clientY + 'px';
+                trail.style.width = '4px';
+                trail.style.height = '4px';
+                trail.style.background = '#00ffff';
+                trail.style.borderRadius = '50%';
+                trail.style.pointerEvents = 'none';
+                trail.style.animation = 'fadeOut 1s forwards';
+                trail.style.zIndex = '9999';
+                document.body.appendChild(trail);
+
+                setTimeout(() => {
+                    trail.remove();
+                }, 1000);
+            }
+        });
+
+        // Add click effect
+        document.addEventListener('click', (e) => {
+            if (e.target.tagName !== 'BUTTON') {
+                const ripple = document.createElement('div');
+                ripple.style.position = 'fixed';
+                ripple.style.left = e.clientX + 'px';
+                ripple.style.top = e.clientY + 'px';
+                ripple.style.width = '20px';
+                ripple.style.height = '20px';
+                ripple.style.border = '2px solid #00ffff';
+                ripple.style.borderRadius = '50%';
+                ripple.style.pointerEvents = 'none';
+                ripple.style.animation = 'rippleEffect 0.6s forwards';
+                ripple.style.transform = 'translate(-50%, -50%)';
+                ripple.style.zIndex = '9999';
+                document.body.appendChild(ripple);
+
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            }
+        });
+
+        // Add ripple effect animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes rippleEffect {
+                0% {
+                    width: 20px;
+                    height: 20px;
+                    opacity: 1;
+                }
+                100% {
+                    width: 60px;
+                    height: 60px;
+                    opacity: 0;
+                }
+            }
+
+            @keyframes fadeOut {
+                0% {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+                100% {
+                    opacity: 0;
+                    transform: scale(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
